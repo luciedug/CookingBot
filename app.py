@@ -5,12 +5,13 @@ import requests
 import csv
 import random
 import spoonacular as sp
-
+import os
+#To connect to spoonacular API in order to get a random joke
 api = sp.API("8fb217867404486192e99424e58bcb10")
-
+#Connecion to messenger 
 app = Flask(__name__)
-ACCESS_TOKEN = 'EAADFDulpZCEkBALbsO0oRZBvcITAN6YSOInDpFQIzpkZAZA1xtG9taDD7IjRAVE1mI5bZBkHJke7ZA3OTLwWYmeJdPDFypZCwDoR1zhVBzgks5HkkMwpwES33GNuvqfZCNSZAzSbqF4XOjnex5gp8F5gU1fiSZCGAowh7XeM1aFSG4TgZDZD'
-VERIFY_TOKEN = 'blabla'
+ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
+VERIFY_TOKEN = os.environ['VERIFY_TOKEN']
 bot = Bot(ACCESS_TOKEN)
 
 
@@ -141,12 +142,8 @@ def verify_fb_token(token_sent):
     return 'Invalid verification token'
 
 
-#chooses a random message to send to the user
-def get_message():
-    sample_responses = ["You are stunning!", "We're proud of you.", "Keep on being you!", "We're greatful to know you :)"]
-    # return selected item to the user
-    return random.choice(sample_responses)
 
+#The following functions will get a recipe for different occasion in the database
 def get_savory_random(data):
     b=0
     url=""
@@ -456,7 +453,7 @@ def get_savory_asian_h(data):
             b = 1
     return res
 
-
+#if the user's answer is not handle in this list, then it will display a joke
 def create_list():
     list_p = []
     
@@ -517,13 +514,13 @@ def create_list():
     list_p.append("hi")
     return list_p
 
-#uses PyMessenger to send response to user
+#function that answer to the user 
 def send_message(recipient_id, response):
     #sends user the text message provided via input response parameter
     bot.send_text_message(recipient_id, response)
     return "success"
 
-
+#display a joke from spoonacular API
 def get_joke():
     response = api.get_a_random_food_joke()
     data = response.json()
