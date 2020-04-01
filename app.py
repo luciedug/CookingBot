@@ -11,7 +11,7 @@ api = sp.API("8fb217867404486192e99424e58bcb10")
 #Connecion to messenger 
 app = Flask(__name__)
 ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
-VERIFY_TOKEN = os.environ['VERIFY_TOKEN']
+VERIFY_TOKEN = "blabla"
 bot = Bot(ACCESS_TOKEN)
 
 
