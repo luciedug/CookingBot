@@ -5,13 +5,12 @@ import requests
 import csv
 import random
 import spoonacular as sp
-import os
 #To connect to spoonacular API in order to get a random joke
 api = sp.API("8fb217867404486192e99424e58bcb10")
-#Connecion to messenger 
+#Connection to messenger
 app = Flask(__name__)
-ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
-VERIFY_TOKEN = "blabla"
+ACCESS_TOKEN = 'EAADFDulpZCEkBALbsO0oRZBvcITAN6YSOInDpFQIzpkZAZA1xtG9taDD7IjRAVE1mI5bZBkHJke7ZA3OTLwWYmeJdPDFypZCwDoR1zhVBzgks5HkkMwpwES33GNuvqfZCNSZAzSbqF4XOjnex5gp8F5gU1fiSZCGAowh7XeM1aFSG4TgZDZD'
+VERIFY_TOKEN = 'blabla'
 bot = Bot(ACCESS_TOKEN)
 
 
@@ -19,8 +18,8 @@ bot = Bot(ACCESS_TOKEN)
 
 def receive_message():
     data = read_csv()
-    welcomes = ["hello", "Hello", "Hi", "hi"]
-    first_message = "Hello, what type of recipe do you want today ? Salty ? Sugary ? Surprise ?"
+    welcomes = ["hello", "Hello", "Hi", "hi","Again","again"]
+    first_message = "Hello, what type of recipe do you want? Please Write : salty, sugary or surprise ? You can restart at any time writing the word again"
     salty1 = ["Enter a code (for ex s1)", "s1 random salty", "s2 Healthy salty", "s3 Comfort Salty", "s4 More options"]
     salty1final = "\n".join(salty1)
     salty2 = ["Enter a code (for ex t1)", "t1 random American", "t2 American and healthy", "t3 random Asian", "t4 Asian and healthy", "t5 Random Italian", "t6 Italian and healthy", "t7 Random French", "t8 French and healthy"]
@@ -125,6 +124,9 @@ def receive_message():
                 if message['message'].get('text')=="v8" or message['message'].get('text')=="V8":
                     response_sent_text = get_sugary_french_h(data)
                     send_message(recipient_id, response_sent_text)
+                if message['message'].get('text')=="surprise" or message['message'].get('text')=="Surprise":
+                    response_sent_text = get_total_random(data)
+                    send_message(recipient_id, response_sent_text)
                 if message['message'].get('text') not in list_p:
                     resp = ["I don't understand your answer/code","Therefore, I'm goign to share a joke : ", get_joke()]
                     response_sent_text = "\n".join(resp)
@@ -144,6 +146,15 @@ def verify_fb_token(token_sent):
 
 
 #The following functions will get a recipe for different occasion in the database
+def get_total_random(data):
+    n = randint(0, len(data)-1)
+    elem = data[n]
+    url = elem[2]
+    name = elem[1]
+    tab = [name, url]
+    res = "\n".join(tab)
+    return res
+
 def get_savory_random(data):
     b=0
     url=""
@@ -482,7 +493,8 @@ def create_list():
     list_p.append("v7")
     list_p.append("V7")
     list_p.append("v8")
-    list_p.append("V8")list_p.append("salty")
+    list_p.append("V8")
+    list_p.append("salty")
     list_p.append("Salty")
     list_p.append("s1")
     list_p.append("S1")
@@ -512,6 +524,10 @@ def create_list():
     list_p.append("Hello")
     list_p.append("Hi")
     list_p.append("hi")
+    list_p.append("Surprise")
+    list_p.append("surprise")
+    list_p.append("again")
+    list_p.append("Again")
     return list_p
 
 #function that answer to the user 
